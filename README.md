@@ -1,45 +1,35 @@
-# Test package
+## Configuración
 
-## Cámara
+1. ### Creación de espacio de trabajo
+```bash
+cd ~
+mkdir -p leonardo_ws/src
+```
+2. ### Descarga de repositorio
+```bash
+cd leonardo_ws/src
+git clone https://github.com/morg1207/Leonardo-Bot.git
+```
+3. ### Descargar e instalar dependencias
+```bash
+cd ~/leonardo_ws
+rosdep init
+rosdep update --rosdistro $ROS_DISTRO
+rosdep install -i --from-path src --rosdistro $ROS_DISTRO -y
+```
+4. ### Compilación de espacio de trabajo
 
-1. ###  Configuración de entorno
-    ```bash
-    source ~/quadruped_robot_ws/install/setup.bash
-    ```
+```bash
+cd ~/leonardo_ws
+source /opt/ros/humble/setup.bash 
+colcon build --symlink-install
+source install/setup.bash
+```
+4. ### Ejecutar cámara
 
-2. ### Instalar dependencias
+```bash
+cd ~/leonardo_ws
+source install/setup.bash
+ros2 launch leonardo_web leonado_web.launch.py
+```
 
-    ```bash
-    sudo apt install python3-opencv
-    sudo apt update
-    sudo apt install v4l-utils
-    ```
-3. ### Ejecutar publicador
-    Terminal 1
-
-    ```bash
-    source ~/quadruped_robot_ws/install/setup.bash
-    ros2 launch test_package publisher_camera.launch.py device:=0 fps:=10
-    ```
-    - Parameters:
-        - **device**: Dispositivo de video para capturar, para ver la lista de dispositivos ejecutar lo siguiente.
-        ```bash
-        ls /dev | grep video*
-        ```
-        output
-
-        <img src="../images/test_package/output_dev.png" alt="dev" width="400"/>  
-
-        - **fps**: Frames por segundo, para ver la información de la cámara ejecutar lo siguiente
-        ```bash
-        v4l2-ctl --device=/dev/video0 --all
-        ```
-            - Donde 'video0' es el dispositivo analizar.
-
-4. ### Ejecutar suscriptor
-
-    Terminal 2
-    ```bash
-    source ~/quadruped_robot_ws/install/setup.bash
-    ros2 run test_package subscriber_camera 
-    ```
